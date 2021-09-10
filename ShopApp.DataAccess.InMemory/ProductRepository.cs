@@ -46,7 +46,7 @@ namespace ShopApp.DataAccess.InMemory
             var productToDelete = products.FirstOrDefault(p => p.Id == product.Id);
             if (productToDelete != null)
             {
-                productToDelete = product;
+                products.Remove(productToDelete);
             }
             else
             {
