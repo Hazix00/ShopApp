@@ -88,7 +88,7 @@ namespace ShopApp.WebUI.Controllers
             {
                 return HttpNotFound();
             }
-            productCategoryContext.Delete(productCategory);
+            productCategoryContext.Delete(Id);
             productCategoryContext.Commit();
             return RedirectToAction("Index");
         }

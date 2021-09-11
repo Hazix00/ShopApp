@@ -56,9 +56,9 @@ namespace ShopApp.DataAccess.InMemory
                 throw new Exception($"{className} not Found");
             }
         }
-        public void Delete(T t)
+        public void Delete(string Id)
         {
-            T tToDelete = items.FirstOrDefault(item => item.Id == t.Id);
+            T tToDelete = items.FirstOrDefault(item => item.Id == Id);
             if (tToDelete != null)
             {
                 items.Remove(tToDelete);

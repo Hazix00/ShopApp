@@ -96,7 +96,7 @@ namespace ShopApp.WebUI.Controllers
             {
                 return HttpNotFound();
             }
-            productContext.Delete(product);
+            productContext.Delete(Id);
             productContext.Commit();
             return RedirectToAction("Index");
         }

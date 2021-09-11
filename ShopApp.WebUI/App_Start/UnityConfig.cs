@@ -1,6 +1,6 @@
 using ShopApp.Core.Contracts;
 using ShopApp.Core.Models;
-using ShopApp.DataAccess.InMemory;
+using ShopApp.DataAccess.SQL;
 using System;
 
 using Unity;
@@ -45,8 +45,8 @@ namespace ShopApp.WebUI
 
             // TODO: Register your type's mappings here.
             // container.RegisterType<IProductRepository, ProductRepository>();
-            container.RegisterType<IRepository<Product>, InMemoryRepository<Product>>();
-            container.RegisterType<IRepository<ProductCategory>, InMemoryRepository<ProductCategory>>();
+            container.RegisterType<IRepository<Product>, SQLRepository<Product>>();
+            container.RegisterType<IRepository<ProductCategory>, SQLRepository<ProductCategory>>();
         }
     }
 }
