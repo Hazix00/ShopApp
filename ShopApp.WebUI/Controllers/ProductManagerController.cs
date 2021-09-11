@@ -11,12 +11,12 @@ namespace ShopApp.WebUI.Controllers
 {
     public class ProductManagerController : Controller
     {
-        ProductRepository productContext;
-        ProductCategoryRepository productCategoryContext;
+        InMemoryRepository<Product> productContext;
+        InMemoryRepository<ProductCategory> productCategoryContext;
         public ProductManagerController()
         {
-            productContext = new ProductRepository();
-            productCategoryContext = new ProductCategoryRepository();
+            productContext = new InMemoryRepository<Product>();
+            productCategoryContext = new InMemoryRepository<ProductCategory>();
         }
         // GET: ProductManager
         public ActionResult Index()
