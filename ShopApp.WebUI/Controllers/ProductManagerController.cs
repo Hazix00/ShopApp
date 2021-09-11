@@ -1,4 +1,5 @@
 ﻿using ShopApp.Core.Models;
+using ShopApp.Core.ViewModels;
 using ShopApp.DataAccess.InMemory;
 using System;
 using System.Collections.Generic;
@@ -10,21 +11,25 @@ namespace ShopApp.WebUI.Controllers
 {
     public class ProductManagerController : Controller
     {
-        ProductRepository context;
+        ProductRepository productContext;
+        ProductCategoryRepository productCategoryContext;
         public ProductManagerController()
         {
-            context = new ProductRepository();
+            productContext = new ProductRepository();
+            productCategoryContext = new ProductCategoryRepository();
         }
         // GET: ProductManager
         public ActionResult Index()
         {
-            var products = context.Collection().ToList();
+            var products = productContext.Collection().ToList();
             return View(products);
         }
         public ActionResult Create()
         {
-            var product = new Product();
-            return View(product);
+            var productManagerViewModel = new ProductManagerViewModel();
+            productManagerViewModel.Product = new Product();
+            productManagerViewModel.ProductCategories = productCategoryContext.Collection().ToList();
+            return View(productManagerViewModel);
         }
         [HttpPost]
         public ActionResult Create(Product product)
@@ -33,23 +38,26 @@ namespace ShopApp.WebUI.Controllers
             {
                 return View(product);
             }
-            context.Insert(product);
-            context.Commit();
+            productContext.Insert(product);
+            productContext.Commit();
             return RedirectToAction("Index");
         }
         public ActionResult Edit(string Id)
         {
-            var product = context.Find(Id);
+            var product = productContext.Find(Id);
             if (product == null)
             {
                 return HttpNotFound();
             }
-            return View(product);
+            var productManagerViewModel = new ProductManagerViewModel();
+            productManagerViewModel.Product = product;
+            productManagerViewModel.ProductCategories = productCategoryContext.Collection().ToList();
+            return View(productManagerViewModel);
         }
         [HttpPost]
         public ActionResult Edit(Product product, string Id)
         {
-            var productToUpdate = context.Find(Id);
+            var productToUpdate = productContext.Find(Id);
             if (productToUpdate == null)
             {
                 return HttpNotFound();
@@ -65,13 +73,13 @@ namespace ShopApp.WebUI.Controllers
                 prop.SetValue(productToUpdate, prop.GetValue(product));
             }
 
-            context.Update(productToUpdate);
-            context.Commit();
+            productContext.Update(productToUpdate);
+            productContext.Commit();
             return RedirectToAction("Index");
         }
         public ActionResult Delete(string Id)
         {
-            var product = context.Find(Id);
+            var product = productContext.Find(Id);
             if (product == null)
             {
                 return HttpNotFound();
@@ -82,13 +90,13 @@ namespace ShopApp.WebUI.Controllers
         [ActionName("Delete")]
         public ActionResult ComfirmDelete(string Id)
         {
-            var product = context.Find(Id);
+            var product = productContext.Find(Id);
             if (product == null)
             {
                 return HttpNotFound();
             }
-            context.Delete(product);
-            context.Commit();
+            productContext.Delete(product);
+            productContext.Commit();
             return RedirectToAction("Index");
         }
 
