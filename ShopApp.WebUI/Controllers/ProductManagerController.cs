@@ -1,4 +1,5 @@
-﻿using ShopApp.Core.Models;
+﻿using ShopApp.Core.Contracts;
+using ShopApp.Core.Models;
 using ShopApp.Core.ViewModels;
 using ShopApp.DataAccess.InMemory;
 using System;
@@ -11,12 +12,12 @@ namespace ShopApp.WebUI.Controllers
 {
     public class ProductManagerController : Controller
     {
-        InMemoryRepository<Product> productContext;
-        InMemoryRepository<ProductCategory> productCategoryContext;
-        public ProductManagerController()
+        IRepository<Product> productContext;
+        IRepository<ProductCategory> productCategoryContext;
+        public ProductManagerController(IRepository<Product> productContext, IRepository<ProductCategory> productCategoryContext)
         {
-            productContext = new InMemoryRepository<Product>();
-            productCategoryContext = new InMemoryRepository<ProductCategory>();
+            this.productContext = productContext;
+            this.productCategoryContext = productCategoryContext;
         }
         // GET: ProductManager
         public ActionResult Index()
