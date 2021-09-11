@@ -4,6 +4,7 @@ using ShopApp.Core.ViewModels;
 using ShopApp.DataAccess.InMemory;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -33,11 +34,16 @@ namespace ShopApp.WebUI.Controllers
             return View(productManagerViewModel);
         }
         [HttpPost]
-        public ActionResult Create(Product product)
+        public ActionResult Create(Product product, HttpPostedFileBase file)
         {
             if (!ModelState.IsValid)
             {
                 return View(product);
+            }
+            if (file != null)
+            {
+                product.Image = $"{ product.Id }{ Path.GetExtension(file.FileName) }";
+                file.SaveAs( $"{ Server.MapPath(@"/Content/ProductImages/") }{ product.Image }" );
             }
             productContext.Insert(product);
             productContext.Commit();
@@ -56,7 +62,7 @@ namespace ShopApp.WebUI.Controllers
             return View(productManagerViewModel);
         }
         [HttpPost]
-        public ActionResult Edit(Product product, string Id)
+        public ActionResult Edit(Product product, string Id, HttpPostedFileBase file)
         {
             var productToUpdate = productContext.Find(Id);
             if (productToUpdate == null)
@@ -66,6 +72,18 @@ namespace ShopApp.WebUI.Controllers
             if (!ModelState.IsValid)
             {
                 return View(product);
+            }
+
+            if (file != null)
+            {
+                string imagesPath = Server.MapPath(@"/Content/ProductImages/");
+                string oldImage = $"{ imagesPath }{ productToUpdate.Image }";
+                if (productToUpdate.Image != null && System.IO.File.Exists(oldImage))
+                {
+                    System.IO.File.Delete(oldImage);
+                }
+                product.Image = $"{ product.Id }.{ Path.GetExtension(file.FileName) }";
+                file.SaveAs($"{ imagesPath }{ product.Image }");
             }
 
             foreach (var prop in typeof(Product).GetProperties())
@@ -95,6 +113,12 @@ namespace ShopApp.WebUI.Controllers
             if (product == null)
             {
                 return HttpNotFound();
+            }
+            string imagesPath = Server.MapPath(@"/Content/ProductImages/");
+            string oldImage = $"{ imagesPath }{ product.Image }";
+            if (product.Image != null && System.IO.File.Exists(oldImage))
+            {
+                System.IO.File.Delete(oldImage);
             }
             productContext.Delete(Id);
             productContext.Commit();
