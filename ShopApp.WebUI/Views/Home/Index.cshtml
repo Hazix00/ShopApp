@@ -10,7 +10,7 @@
 {
 <div class="col-md-4" style="height:450px;padding:10px;margin:10px;border:solid thin whitesmoke;">
     <div class=" col-md-12">
-        <img class="img-responsive" src="~/Content/ProductImages/@item.Image" />
+        <img class="img-responsive product__image" src="~/Content/ProductImages/@item.Image" />
     </div>
     <div class=" col-md-12">
         <strong>@Html.ActionLink(item.Name, "Details", new { Id = item.Id })</strong>

@@ -22,3 +22,7 @@ select,
 textarea {
     max-width: 280px;
 }
+
+.product__image {
+    height: 300px;
+}
